@@ -9,5 +9,6 @@ package com.mycompany.uno;
  * @author torre
  */
 public enum Color {
-    RED, BLUE, YELLOW, GREEN, BLACK
+    // Natural ordering according to online UNO game.
+    RED, GREEN, YELLOW, BLUE, BLACK
 }
