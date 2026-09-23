@@ -20,6 +20,10 @@ public class Card {
             color = Color.BLACK;
             rank = r;
         }
+        else{
+            color = Color.RED;
+            rank = r;
+        }
     }
     public Color getColor(){return this.color;}
     public Rank getRank(){return this.rank;}
