@@ -12,7 +12,11 @@ public class Uno {
     
     public static void main(String[] args) {
         Deck myDeck = new Deck();
-        for (int i = 0; i < myDeck.getLength(); i++)
-            System.out.println(myDeck.cards[i]);
+        int size = myDeck.size();
+        myDeck.shuffle();
+        System.out.println(myDeck);
+        System.out.println("\n");
+        myDeck.shuffle();
+        System.out.println(myDeck);
     }
 }
