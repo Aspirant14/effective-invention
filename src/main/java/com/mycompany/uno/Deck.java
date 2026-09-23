@@ -79,6 +79,7 @@ public class Deck {
     public void sortRank(boolean desc){
         int position;
         Card current;
+        Rank rank;
         Iterator<Card> it = cards.iterator(),
                 backward = cards.descendingIterator();
         // Make a frequency map. Black is the fifth color.
@@ -88,25 +89,8 @@ public class Deck {
         if (cards.isEmpty()) return;
         while(it.hasNext()){
             current = it.next();
-            if (desc) prefixSums[
-                    switch(current.getRank()){
-                        case Rank.ZERO -> 14;
-                        case Rank.ONE -> 13;
-                        case Rank.TWO -> 12;
-                        case Rank.THREE -> 11;
-                        case Rank.FOUR -> 10;
-                        case Rank.FIVE -> 9;
-                        case Rank.SIX -> 8;
-                        case Rank.SEVEN -> 7;
-                        case Rank.EIGHT -> 6;
-                        case Rank.NINE -> 5;
-                        case Rank.SKIP -> 4;
-                        case Rank.REVERSE -> 3;
-                        case Rank.DRAW_TWO -> 2;
-                        case Rank.WILD -> 1;
-                        case Rank.WILD_4 -> 0;
-            }]++;
-            else prefixSums[current.getRank().ordinal()]++;
+            rank = desc ? current.getRank().flipRank() : current.getRank();
+            prefixSums[rank.ordinal()]++;
         }
         // Convert map to prefix sum
         for(int i = 1; i < ALL_RANKS; i++) prefixSums[i] += prefixSums[i - 1];
@@ -117,26 +101,8 @@ public class Deck {
                The colors are mapped to the prefix sums in reverse order.
                The sum is decremented.
                The prefix sum is one off from the intended position. */
-            if (desc) position = prefixSums[
-                    switch(current.getRank()){
-                        case Rank.ZERO -> 14;
-                        case Rank.ONE -> 13;
-                        case Rank.TWO -> 12;
-                        case Rank.THREE -> 11;
-                        case Rank.FOUR -> 10;
-                        case Rank.FIVE -> 9;
-                        case Rank.SIX -> 8;
-                        case Rank.SEVEN -> 7;
-                        case Rank.EIGHT -> 6;
-                        case Rank.NINE -> 5;
-                        case Rank.SKIP -> 4;
-                        case Rank.REVERSE -> 3;
-                        case Rank.DRAW_TWO -> 2;
-                        case Rank.WILD -> 1;
-                        case Rank.WILD_4 -> 0;
-            }]-- - 1;
-            else position = prefixSums[current.getRank().ordinal()]-- - 1;
-            
+            rank = desc ? current.getRank().flipRank() : current.getRank();
+            position = prefixSums[rank.ordinal()]-- - 1;
             temp[position] = current;
         }
         cards.clear();
