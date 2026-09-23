@@ -27,9 +27,11 @@ public class Deck {
                 cards.addLast(new Card(c, r));
                 cards.addLast(new Card(c, r));
             }
-            cards.addLast(new Card(Color.BLACK, Rank.WILD));
-            cards.addLast(new Card(Color.BLACK, Rank.WILD_4));
         }
+        for (int i = 0; i < 4; i++)
+            cards.addLast(new Card(Color.BLACK, Rank.WILD));
+        for (int i = 0; i < 4; i++)
+            cards.addLast(new Card(Color.BLACK, Rank.WILD_4));
     }
     // Returns size of array, not contents of array.
     public int size(){return cards.size();}
@@ -49,28 +51,27 @@ public class Deck {
         Color color;
         Iterator<Card> it = cards.iterator(),
                 backward = cards.descendingIterator();
-        // Make a frequency map. Black is the fifth color.
+        // Make a frequency map.
         int[] prefixSums = new int[ALL_COLORS];
         // Make temporary array.
         Card[] temp = new Card[START_SIZE];
         if (cards.isEmpty()) return;
         while(it.hasNext()){
-            color = it.next().getColor();
-            if (desc) prefixSums[color.flipColor().ordinal()]++;
-            else prefixSums[color.ordinal()]++;
+            current = it.next();
+            color = desc ? current.getColor().flipColor() : current.getColor();
+            prefixSums[color.ordinal()]++;
         }
         // Convert map to prefix sum
         for(int i = 1; i < ALL_COLORS; i++) prefixSums[i] += prefixSums[i - 1];
-        // Reverse traverse
+        // Traverse the cards in reverse order and place them.
         while(backward.hasNext()){
             current = backward.next();
-            color = current.getColor();
+            color = desc ? current.getColor().flipColor() : current.getColor();
             /* The color of the card determines the sum needed.
                The colors are mapped to the prefix sums in reverse order.
                The sum is decremented.
                The prefix sum is one off from the intended position. */
-            if (desc) position = prefixSums[color.flipColor().ordinal()]-- - 1;
-            else position = prefixSums[color.ordinal()]-- - 1;
+            position = prefixSums[color.ordinal()]-- - 1;
             temp[position] = current;
         }
         cards.clear();
@@ -82,7 +83,7 @@ public class Deck {
         Rank rank;
         Iterator<Card> it = cards.iterator(),
                 backward = cards.descendingIterator();
-        // Make a frequency map. Black is the fifth color.
+        // Make a frequency map.
         int[] prefixSums = new int[ALL_RANKS];
         // Make temporary array.
         Card[] temp = new Card[START_SIZE];
@@ -94,7 +95,7 @@ public class Deck {
         }
         // Convert map to prefix sum
         for(int i = 1; i < ALL_RANKS; i++) prefixSums[i] += prefixSums[i - 1];
-        // Reverse traverse
+        // Traverse the cards in reverse order and place them.
         while(backward.hasNext()){
             current = backward.next();
             /* The color of the card determines the sum needed.
